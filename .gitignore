@@ -1,0 +1,43 @@
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Node / Vite
+node_modules/
+dist/
+build/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Docker / runtime
+*.pid
+*.log
+logs/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Accidentally-created empty brace dirs from shell brace expansion on Windows
+[{]backend/
+frontend/src/[{]pages,components[}]/
+[{]backend/[{]app/
+[{]backend/[{]app/[{]routes,services[}],models,utils[}],frontend/

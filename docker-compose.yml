@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  backend:
+    build: {context: ./backend, dockerfile: Dockerfile}
+    container_name: smartcloud2-backend
+    ports: ["8000:8000"]
+    environment: [PYTHONPATH=/app, PYTHONUNBUFFERED=1]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL","curl -f http://localhost:8000/api/health/ || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 8
+      start_period: 120s
+    networks: [smartcloud-net]
+
+  frontend:
+    build: {context: ./frontend, dockerfile: Dockerfile}
+    container_name: smartcloud2-frontend
+    ports: ["3000:80"]
+    depends_on: {backend: {condition: service_healthy}}
+    restart: unless-stopped
+    networks: [smartcloud-net]
+
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: smartcloud2-prometheus
+    ports: ["9090:9090"]
+    volumes: [./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro]
+    command: [--config.file=/etc/prometheus/prometheus.yml, --web.enable-lifecycle]
+    restart: unless-stopped
+    networks: [smartcloud-net]
+
+networks:
+  smartcloud-net: {driver: bridge}
